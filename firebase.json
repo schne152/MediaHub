@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "mediahub",
     "public": "public",
     "ignore": [
       "firebase.json",
