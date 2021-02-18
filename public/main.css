@@ -1,0 +1,70 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.navbar {
+  background: rgb(18,182,223);
+  background: linear-gradient(90deg, rgba(18,182,223,1) 32%, rgba(0,255,207,1) 100%);
+}
+
+.nav-link,
+.navbar-brand {
+    color: #fff;
+    cursor: pointer;
+}
+
+.nav-link {
+    margin-right: 1em !important;
+}
+
+.nav-link:hover {
+    color: #000;
+}
+
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+.navbar-nav {
+  flex-direction: row;
+}
+
+.navbar-nav button:hover {
+  color: #f1f1f1;
+}
+
+.header {
+    background-image: url('images/header-background.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* The sidebar menu */
+.sidebar {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  background-color: #ffffff; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 16px; /* Place content 16px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+}
+
+.sidebar button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sidebar button:hover {
+  color: #f1f1f1;
+}
+
+.svg {
+  vertical-align: middle;
+}
