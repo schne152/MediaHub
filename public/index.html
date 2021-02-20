@@ -6,56 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Media Hub</title>
     <script src="https://kit.fontawesome.com/5108b1d725.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link href="main.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
   </head>
 
   <body>
-
-    <nav id="navBar" class="navbar navbar-expand-md">
-      <div class="container-fluid">
-        <ul class="navbar-nav navbar-left">
-          <button type="button" class="btn btn-default" onclick="toggleSidebar()">
-            <i id="mediaNavToggler" class="fas fa-bars"></i>
-          </button>
-        </ul>
-        <ul class="navbar-nav navbar-right">
-          <button type="button" class="btn btn-default">
-            <i class="fas fa-search fa-flip-horizontal"></i>
-          </button>
-          <button type="button" class="btn btn-default">
-            <i class="fas fa-user-circle"></i>
-          </button>
-        </ul>
-      </div>
-    </nav>
-
-    <div id="mySidebar" class="sidebar">
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-ticket-alt"></i>
-      </button>
-      <button type="button" class="btn btn-default">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="icon" style="vertical-align: sub"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
-      </button>
-      </button>
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-book"></i>
-      </button>
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-headphones"></i>
-      </button>
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-gamepad"></i>
-      </button>
-    </div>
-
-    <header class="page-header header container-fluid">
-
-    </header>
+    <div id="navbar_container"></div>
+    <div id="sidebar_container"></div>
+    <div id="page_container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-    <script src="main.js"></script>
-
+    <script src="js/main.js"></script>
+    <script> feather.replace() </script>
   </body>
 
 </html>
