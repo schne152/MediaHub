@@ -52,12 +52,55 @@ function loadDefaultPage() {
   default_client.onreadystatechange = function() {
     if (default_client.readyState == 4) {
       if (default_client.status == 200) {
-        page_title.innerHTML = default_page_title;
+        page_title.innerText = default_page_title;
         page_container.innerHTML = default_client.responseText;
       }
     }
   }
   default_client.send();
+
+  // initialize navbar buttons
+  document.getElementById("search_navbar_button").addEventListener("click", function() {
+    let search_context = document.getElementById("page_title").innerText;
+    let client = new XMLHttpRequest();
+    client.open('GET', 'pages/search.html', true);
+    client.onreadystatechange = function() {
+      if (client.readyState == 4) {
+        if (client.status == 200) {
+          if (search_context == "Profile") {
+            search_context = default_page_title;
+          }
+          if (search_context.substring(0,4) != "Find") {
+            if (search_context != "TV" && search_context != "Music") {
+              page_name_singular = search_context.substring(0,search_context.length-1);
+            }
+            else if (search_context == "TV") {
+              page_name_singular = "TV Show";
+            }
+            else if (search_context == "Music") {
+              page_name_singular = search_context;
+            }
+            page_title.innerHTML = "Find " + page_name_singular;
+            page_container.innerHTML = client.responseText;
+          }
+        }
+      }
+    }
+    client.send();
+  });
+  document.getElementById("profile_navbar_button").addEventListener("click", function() {
+    let client = new XMLHttpRequest();
+    client.open('GET', 'pages/profile.html', true);
+    client.onreadystatechange = function() {
+      if (client.readyState == 4) {
+        if (client.status == 200) {
+          page_title.innerText = "Profile";
+          page_container.innerHTML = client.responseText;
+        }
+      }
+    }
+    client.send();
+  });
 }
 
 // initialize sidebar button click listeners
@@ -68,7 +111,7 @@ function initializeSidebarClickListeners() {
     client.onreadystatechange = function() {
       if (client.readyState == 4) {
         if (client.status == 200) {
-          page_title.innerHTML = "Movies";
+          page_title.innerText = "Movies";
           page_container.innerHTML = client.responseText;
         }
       }
@@ -81,7 +124,7 @@ function initializeSidebarClickListeners() {
     client.onreadystatechange = function() {
       if (client.readyState == 4) {
         if (client.status == 200) {
-          page_title.innerHTML = "TV";
+          page_title.innerText = "TV";
           page_container.innerHTML = client.responseText;
         }
       }
@@ -94,7 +137,7 @@ function initializeSidebarClickListeners() {
     client.onreadystatechange = function() {
       if (client.readyState == 4) {
         if (client.status == 200) {
-          page_title.innerHTML = "Books";
+          page_title.innerText = "Books";
           page_container.innerHTML = client.responseText;
         }
       }
@@ -107,7 +150,7 @@ function initializeSidebarClickListeners() {
     client.onreadystatechange = function() {
       if (client.readyState == 4) {
         if (client.status == 200) {
-          page_title.innerHTML = "Music";
+          page_title.innerText = "Music";
           page_container.innerHTML = client.responseText;
         }
       }
@@ -120,7 +163,7 @@ function initializeSidebarClickListeners() {
     client.onreadystatechange = function() {
       if (client.readyState == 4) {
         if (client.status == 200) {
-          page_title.innerHTML = "Video Games";
+          page_title.innerText = "Video Games";
           page_container.innerHTML = client.responseText;
         }
       }
