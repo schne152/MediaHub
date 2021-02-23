@@ -1,50 +1,76 @@
 // check if user is logged in
-if(true){
-  let navbar_client = new XMLHttpRequest();
-  let navbar_container = document.getElementById("page_container");
-  navbar_client.open('GET', 'pages/login_options.html', true);
-  navbar_client.onreadystatechange = function() {
-    if (navbar_client.readyState == 4) {
-      if (navbar_client.status == 200) {
-        navbar_container.innerHTML = navbar_client.responseText;
-      }
-    }
-  }
-  navbar_client.send();
+if(false){
+  loadLoginOptionsPage();
 } else {
   enterApp();
 }
 
-function enterApp(){
-  // load navbar
-  let navbar_client = new XMLHttpRequest();
-  let navbar_container = document.getElementById("navbar_container");
-  navbar_client.open('GET', 'partials/navbar.html', true);
-  navbar_client.onreadystatechange = function() {
-    if (navbar_client.readyState == 4) {
-      if (navbar_client.status == 200) {
-        navbar_container.innerHTML = navbar_client.responseText;
-        loadDefaultPage()
+var page_navs = null;
+var display_strings = {};
+
+function loadLoginOptionsPage(){
+  let client = new XMLHttpRequest();
+  let page_container = document.getElementById("page_container");
+  client.open('GET', 'pages/login_options.html', true);
+  client.onreadystatechange = function() {
+    if (client.readyState == 4) {
+      if (client.status == 200) {
+        page_container.innerHTML = client.responseText;
+
+        // initialize actionable items
+        document.getElementById("invoke_create_account_page_button").addEventListener("click", function() {
+          loadCreateAccountPage();
+        });
       }
     }
   }
-  navbar_client.send();
+  client.send();
+}
 
-  // load sidebar
-  let sidebar_container = document.getElementById("sidebar_container");
-  let sidebar_client = new XMLHttpRequest();
-  sidebar_client.open('GET', 'partials/sidebar.html', true);
-  sidebar_client.onreadystatechange = function() {
-    if (sidebar_client.readyState == 4) {
-      if (sidebar_client.status == 200) {
-        sidebar_container.innerHTML = sidebar_client.responseText;
-        initializeSidebarClickListeners()
+function loadCreateAccountPage(){
+  let client = new XMLHttpRequest();
+  let page_container = document.getElementById("page_container");
+  client.open('GET', 'pages/create_account.html', true);
+  client.onreadystatechange = function() {
+    if (client.readyState == 4) {
+      if (client.status == 200) {
+        page_container.innerHTML = client.responseText;
       }
     }
   }
-  sidebar_client.send();
+  client.send();
+}
 
-  // initialize sidebar functionality
+//will add ability for user to define default later
+function loadDefaultPage() {
+  navigateToPage(display_strings["movies_sidebar_button"][0]);
+}
+
+function navigateToPage(id) {
+  console.log(id);
+  let page_title = document.getElementById("page_title");
+  let page_container = document.getElementById("page_container");
+  page_navs.forEach(p => {
+    if (display_strings[p.id][0] == id) {
+      let client = new XMLHttpRequest();
+      let page_html = "pages/" + id;
+      client.open("GET", page_html, true);
+      client.onreadystatechange = function() {
+        if (client.readyState == 4) {
+          if (client.status == 200) {
+            console.log("hello");
+            page_title.innerHTML = display_strings[p.id][1];
+            page_container.innerHTML = client.responseText;
+            document.title = "Media Hub | " + display_strings[p.id][1];
+          }
+        }
+      }
+      client.send();
+    }
+  });
+}
+
+function initializeSidebarFunctionality() {
   window.toggleSidebar=function() {
     if (document.getElementById("media_nav_toggler").className == "fas fa-bars") {
       document.getElementById("sidebar").style.width = "auto";
@@ -58,135 +84,118 @@ function enterApp(){
       document.getElementById("media_nav_toggler").className = "fas fa-bars";
     }
   }
+}
 
-  // load default page. will add ability for user to define default later
-  function loadDefaultPage() {
-    let default_page = 'pages/movies.html';
-    let default_page_title = 'Movies';
-    let page_title = document.getElementById("page_title");
-    let page_container = document.getElementById("page_container")
-    default_client = new XMLHttpRequest();
-    default_client.open('GET', default_page, true);
-    default_client.onreadystatechange = function() {
-      if (default_client.readyState == 4) {
-        if (default_client.status == 200) {
-          page_title.innerText = default_page_title;
-          page_container.innerHTML = default_client.responseText;
-        }
+function initializeNavigationButtons(){
+  page_navs = Array.from(document.getElementsByClassName("page_nav"));
+  // create dictionary of display strings
+  display_strings = {
+    "profile_navbar_button" : ["profile.html","Profile","profile",null],
+    "search_navbar_button" : ["search.html","Find ","search",null],
+    "movies_sidebar_button" : ["movies.html","Movies","movies","Movie"],
+    "tv_sidebar_button" : ["tv.html","TV","tv", null],
+    "books_sidebar_button" : ["books.html","Books","books","Book"],
+    "music_sidebar_button" : ["music.html","Music","music",null],
+    "video_games_sidebar_button" : ["video_games.html","Video Games","video_games","Video Game"]
+  }
+
+  page_navs.forEach(p => {
+    let id = p.id;
+    p.addEventListener("click", e => {
+      history.pushState({id}, `Selected: ${id}`);
+      navigateToPage(display_strings[id][0]);
+    });
+  });
+}
+
+function loadSidebar() {
+  let container = document.getElementById("sidebar_container");
+  let client = new XMLHttpRequest();
+  client.open('GET', 'partials/sidebar.html', true);
+  client.onreadystatechange = function() {
+    if (client.readyState == 4) {
+      if (client.status == 200) {
+        container.innerHTML = client.responseText;
+        initializeSidebarFunctionality();
+
+        initializeNavigationButtons();
+        loadDefaultPage();
       }
     }
-    default_client.send();
-
-    // initialize navbar buttons
-    document.getElementById("search_navbar_button").addEventListener("click", function() {
-      let search_context = document.getElementById("page_title").innerText;
-      let client = new XMLHttpRequest();
-      client.open('GET', 'pages/search.html', true);
-      client.onreadystatechange = function() {
-        if (client.readyState == 4) {
-          if (client.status == 200) {
-            if (search_context == "Profile") {
-              search_context = default_page_title;
-            }
-            if (search_context.substring(0,4) != "Find") {
-              if (search_context != "TV" && search_context != "Music") {
-                page_name_singular = search_context.substring(0,search_context.length-1);
-              }
-              else if (search_context == "TV") {
-                page_name_singular = "TV Show";
-              }
-              else if (search_context == "Music") {
-                page_name_singular = search_context;
-              }
-              page_title.innerHTML = "Find " + page_name_singular;
-              page_container.innerHTML = client.responseText;
-            }
-          }
-        }
-      }
-      client.send();
-    });
-    document.getElementById("profile_navbar_button").addEventListener("click", function() {
-      let client = new XMLHttpRequest();
-      client.open('GET', 'pages/profile.html', true);
-      client.onreadystatechange = function() {
-        if (client.readyState == 4) {
-          if (client.status == 200) {
-            page_title.innerText = "Profile";
-            page_container.innerHTML = client.responseText;
-          }
-        }
-      }
-      client.send();
-    });
   }
-
-  // initialize sidebar button click listeners
-  function initializeSidebarClickListeners() {
-    document.getElementById("movies_sidebar_button").addEventListener("click", function() {
-      let client = new XMLHttpRequest();
-      client.open('GET', 'pages/movies.html', true);
-      client.onreadystatechange = function() {
-        if (client.readyState == 4) {
-          if (client.status == 200) {
-            page_title.innerText = "Movies";
-            page_container.innerHTML = client.responseText;
-          }
-        }
-      }
-      client.send();
-    });
-    document.getElementById("tv_sidebar_button").addEventListener("click", function() {
-      let client = new XMLHttpRequest();
-      client.open('GET', 'pages/tv.html', true);
-      client.onreadystatechange = function() {
-        if (client.readyState == 4) {
-          if (client.status == 200) {
-            page_title.innerText = "TV";
-            page_container.innerHTML = client.responseText;
-          }
-        }
-      }
-      client.send();
-    });
-    document.getElementById("books_sidebar_button").addEventListener("click", function() {
-      let client = new XMLHttpRequest();
-      client.open('GET', 'pages/books.html', true);
-      client.onreadystatechange = function() {
-        if (client.readyState == 4) {
-          if (client.status == 200) {
-            page_title.innerText = "Books";
-            page_container.innerHTML = client.responseText;
-          }
-        }
-      }
-      client.send();
-    });
-    document.getElementById("music_sidebar_button").addEventListener("click", function() {
-      let client = new XMLHttpRequest();
-      client.open('GET', 'pages/music.html', true);
-      client.onreadystatechange = function() {
-        if (client.readyState == 4) {
-          if (client.status == 200) {
-            page_title.innerText = "Music";
-            page_container.innerHTML = client.responseText;
-          }
-        }
-      }
-      client.send();
-    });
-    document.getElementById("video_games_sidebar_button").addEventListener("click", function() {
-      let client = new XMLHttpRequest();
-      client.open('GET', 'pages/video_games.html', true);
-      client.onreadystatechange = function() {
-        if (client.readyState == 4) {
-          if (client.status == 200) {
-            page_title.innerText = "Video Games";
-            page_container.innerHTML = client.responseText;
-          }
-        }
-      }
-      client.send();
-    });
-  }
+  client.send();
 }
+
+function loadNavbar() {
+  let container = document.getElementById("navbar_container");
+  let client = new XMLHttpRequest();
+  client.open('GET', 'partials/navbar.html', true);
+  client.onreadystatechange = function() {
+    if (client.readyState == 4) {
+      if (client.status == 200) {
+        container.innerHTML = client.responseText;
+        loadSidebar();
+        // loadDefaultPage()
+        // // initialize navbar buttons
+        // document.getElementById("search_navbar_button").addEventListener("click", function() {
+        //   let search_context = document.getElementById("page_title").innerText;
+        //   let client = new XMLHttpRequest();
+        //   client.open('GET', 'pages/search.html', true);
+        //   client.onreadystatechange = function() {
+        //     if (client.readyState == 4) {
+        //       if (client.status == 200) {
+        //         if (search_context == "Profile") {
+        //           search_context = default_page_title;
+        //         }
+        //         if (search_context.substring(0,4) != "Find") {
+        //           if (search_context != "TV" && search_context != "Music") {
+        //             page_name_singular = search_context.substring(0,search_context.length-1);
+        //           }
+        //           else if (search_context == "TV") {
+        //             page_name_singular = "TV Show";
+        //           }
+        //           else if (search_context == "Music") {
+        //             page_name_singular = search_context;
+        //           }
+        //           page_title.innerHTML = "Find " + page_name_singular;
+        //           page_container.innerHTML = client.responseText;
+        //         }
+        //       }
+        //     }
+        //   }
+        //   client.send();
+        // });
+        // document.getElementById("profile_navbar_button").addEventListener("click", function() {
+        //   let client = new XMLHttpRequest();
+        //   client.open('GET', 'pages/profile.html', true);
+        //   client.onreadystatechange = function() {
+        //     if (client.readyState == 4) {
+        //       if (client.status == 200) {
+        //         page_title.innerText = "Profile";
+        //         page_container.innerHTML = client.responseText;
+        //       }
+        //     }
+        //   }
+        //   client.send();
+        // });
+      }
+    }
+  }
+  client.send();
+}
+
+function enterApp(){
+  loadNavbar();
+}
+
+window.addEventListener('popstate', e => {
+  if (e.state.id != null) {
+    navigateToPage(display_strings[e.state.id][0]);
+  }
+  else {
+    console.log("load default page");
+    loadDefaultPage();
+  }
+});
+
+history.replaceState({id: null}, 'Default state', './');
